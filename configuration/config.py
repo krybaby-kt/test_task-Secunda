@@ -14,6 +14,8 @@ class Settings(BaseSettings):
     BACKEND_HOST: str
     BACKEND_PORT: int
 
+    API_KEY: str
+
     @property
     def DATABASE_URL_asyncpg(self):
         return f"postgresql+asyncpg://{self.DATABASE_USERNAME}:{self.DATABASE_PASSWORD}@{self.DATABASE_HOST}:{self.DATABASE_PORT}/{self.DATABASE_NAME}"
