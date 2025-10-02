@@ -28,6 +28,9 @@ router = APIRouter()
 async def get_all_organizations_by_building_id(
     building_id: int = Path(..., description="Building id")
 ):
+    """
+    Возвращает список организаций, связанных с указанным зданием.
+    """
     organizations: list[OrganizationModel] = await OrganizationTool.get_all_with_filters(filters=[OrganizationModel.building_id == building_id])
 
     return JSONResponse(
@@ -44,6 +47,9 @@ async def get_all_organizations_by_building_id(
 async def get_all_organizations_by_activity_id(
     activity_id: int = Path(..., description="Activity id")
 ):
+    """
+    Возвращает список организаций, связанных с указанной деятельностью.
+    """
     organization_activities: list[OrganizationActivityModel] = await OrganizationActivityTool.get_all_with_filters(filters=[OrganizationActivityModel.activity_id == activity_id])
     organizations: list[OrganizationModel] = await OrganizationTool.get_all_with_filters(filters=[OrganizationModel.id.in_([organization_activity.organization_id for organization_activity in organization_activities])])
     return JSONResponse(content=[organization.name for organization in organizations])
@@ -129,7 +135,12 @@ async def get_all_organizations_by_bounding_box(
 async def get_organization_by_id(
     organization_id: int = Path(..., description="Organization id")
 ):
+    """
+    Возвращает организацию по её id.
+    """
     organization: OrganizationModel = await OrganizationTool(organization_id).get()
+    if organization is None:
+        return JSONResponse(content=[])
     return JSONResponse(content=organization.name)
 
 
@@ -142,6 +153,9 @@ async def get_organization_by_id(
 async def search_organizations_by_activity(
     activity_name: str = Path(..., description="Activity name")
 ):
+    """
+    Возвращает список организаций, связанных с указанной деятельностью и всеми её поддеятельностями.
+    """
     activities: list[ActivityModel] = await ActivityTool.get_all_with_sub_activities(activity_name)
     organization_activities: list[OrganizationActivityModel] = await OrganizationActivityTool.get_all_with_filters(filters=[OrganizationActivityModel.activity_id.in_([activity.id for activity in activities])])
     organizations: list[OrganizationModel] = await OrganizationTool.get_all_with_filters(filters=[OrganizationModel.id.in_([organization_activity.organization_id for organization_activity in organization_activities])])
@@ -157,5 +171,8 @@ async def search_organizations_by_activity(
 async def search_organizations_by_name(
     organization_name: str = Path(..., description="Organization name")
 ):
+    """
+    Возвращает список организаций, названия которых содержат указанную подстроку.
+    """
     organizations: list[OrganizationModel] = await OrganizationTool.get_all_with_filters(filters=[OrganizationModel.name.ilike(f"%{organization_name}%")])
     return JSONResponse(content=[organization.name for organization in organizations])
