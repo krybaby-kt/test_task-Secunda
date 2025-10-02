@@ -3,7 +3,7 @@
 """
 from fastapi import FastAPI
 from starlette.middleware.cors import CORSMiddleware
-from web_api.endpoints_v1 import router
+from web_api.endpoints.v1 import router
 
 
 app = FastAPI(

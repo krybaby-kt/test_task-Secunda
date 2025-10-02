@@ -15,7 +15,7 @@ from typing import List
 from utils.radius import haversine_distance
 from database.models.activities import ActivityModel
 from database.repositories.activities import ActivityTool
-from web_api.schematics import OrganizationInfo
+from web_api.endpoints.v1.schematics import OrganizationInfo
 
 
 router = APIRouter(dependencies=[Depends(require_api_key)])
