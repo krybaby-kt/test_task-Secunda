@@ -1,3 +1,6 @@
+"""
+Модуль модели здания.
+"""
 from database.base_model import SQLAlchemyModel
 from sqlalchemy import Column, Integer, String, Numeric
 

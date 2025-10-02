@@ -1,3 +1,6 @@
+"""
+Модуль для конфигурации.
+"""
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 

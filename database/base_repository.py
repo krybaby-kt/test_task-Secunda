@@ -1,3 +1,6 @@
+"""
+Модуль базовых репозиториев для работы с SQLAlchemy.
+"""
 from abc import ABC, abstractmethod
 from typing import Any, Optional, List, Dict, TypeVar, Type
 from sqlalchemy import BinaryExpression, select, update, delete, inspect, and_, desc, asc

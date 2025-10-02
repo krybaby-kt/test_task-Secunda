@@ -1,3 +1,6 @@
+"""
+Модуль модели организации.
+"""
 from database.base_model import SQLAlchemyModel
 from sqlalchemy import Column, Integer, String, ForeignKey
 from database.models.buildings import BuildingModel

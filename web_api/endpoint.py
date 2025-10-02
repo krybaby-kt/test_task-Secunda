@@ -1,3 +1,6 @@
+"""
+Модуль для endpoint'ов FastAPI.
+"""
 from fastapi import APIRouter, Path, Query
 from fastapi.responses import JSONResponse
 from database.repositories.organizations import OrganizationTool
@@ -9,7 +12,6 @@ from database.repositories.buildings import BuildingTool
 from web_api.dependencies.api_key import require_api_key
 from fastapi import Depends
 from typing import List
-from decimal import Decimal
 from utils.radius import haversine_distance
 from database.models.activities import ActivityModel
 from database.repositories.activities import ActivityTool
@@ -21,12 +23,12 @@ router = APIRouter()
 
 @router.get(
     "/get-all-organizations-by-building-id/{building_id}",
-    description="Get all organizations by building id",
+    description="Получить все организации по id здания",
     response_model=List[str],
     response_model_exclude_none=True
 )
 async def get_all_organizations_by_building_id(
-    building_id: int = Path(..., description="Building id")
+    building_id: int = Path(..., description="ID здания")
 ):
     """
     Возвращает список организаций, связанных с указанным зданием.
@@ -40,12 +42,12 @@ async def get_all_organizations_by_building_id(
 
 @router.get(
     "/get-all-organizations-by-activity-id/{activity_id}",
-    description="Get all organizations by activity id",
+    description="Получить все организации по id деятельности",
     response_model=List[str],
     response_model_exclude_none=True
 )
 async def get_all_organizations_by_activity_id(
-    activity_id: int = Path(..., description="Activity id")
+    activity_id: int = Path(..., description="ID деятельности")
 ):
     """
     Возвращает список организаций, связанных с указанной деятельностью.
@@ -128,12 +130,12 @@ async def get_all_organizations_by_bounding_box(
 
 @router.get(
     "/get-organization-by-id/{organization_id}",
-    description="Get organization by id",
+    description="Получить организацию по её id",
     response_model=str,
     response_model_exclude_none=True
 )
 async def get_organization_by_id(
-    organization_id: int = Path(..., description="Organization id")
+    organization_id: int = Path(..., description="ID организации")
 ):
     """
     Возвращает организацию по её id.
@@ -146,12 +148,12 @@ async def get_organization_by_id(
 
 @router.get(
     "/search-organizations-by-activity/{activity_name}",
-    description="Search organizations by activity",
+    description="Поиск организаций по деятельности",
     response_model=List[str],
     response_model_exclude_none=True
 )
 async def search_organizations_by_activity(
-    activity_name: str = Path(..., description="Activity name")
+    activity_name: str = Path(..., description="Название деятельности")
 ):
     """
     Возвращает список организаций, связанных с указанной деятельностью и всеми её поддеятельностями.
@@ -164,12 +166,12 @@ async def search_organizations_by_activity(
 
 @router.get(
     "/search-organizations-by-name/{organization_name}",
-    description="Search organizations by name",
+    description="Поиск организаций по названию",
     response_model=List[str],
     response_model_exclude_none=True
 )
 async def search_organizations_by_name(
-    organization_name: str = Path(..., description="Organization name")
+    organization_name: str = Path(..., description="Название организации")
 ):
     """
     Возвращает список организаций, названия которых содержат указанную подстроку.

@@ -1,3 +1,6 @@
+"""
+Модуль для вычисления расстояния между двумя точками на Земле по формуле Haversine.
+"""
 from math import radians, sin, cos, sqrt, atan2
 
 

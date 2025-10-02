@@ -1,3 +1,6 @@
+"""
+Модуль модели связи организации и деятельности.
+"""
 from database.base_model import SQLAlchemyModel
 from sqlalchemy import Column, Integer, ForeignKey
 from database.models.organizations import OrganizationModel

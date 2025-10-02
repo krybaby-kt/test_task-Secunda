@@ -1,3 +1,6 @@
+"""
+Модуль репозитория телефонного номера.
+"""
 from database.base_repository import AsyncBaseIdSQLAlchemyCRUD
 from asyncio import Lock
 

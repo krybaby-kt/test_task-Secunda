@@ -4,7 +4,6 @@
 Настраивает асинхронное подключение к PostgreSQL с пулом соединений,
 создает сессионный объект и базовый класс для всех моделей.
 """
-
 from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine, async_sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
 from configuration.config import settings

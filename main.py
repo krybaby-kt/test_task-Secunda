@@ -1,3 +1,6 @@
+"""
+Модуль для запуска FastAPI приложения.
+"""
 from colorama import init
 import logging
 
@@ -12,6 +15,9 @@ logging.basicConfig(level=logging.DEBUG, format='%(asctime)s | %(levelname)s:%(n
 
 
 async def main():
+    """
+    Запускает FastAPI приложение.
+    """
     web_api_config = uvicorn.Config(
         app="web_api:app",
         log_level="debug",

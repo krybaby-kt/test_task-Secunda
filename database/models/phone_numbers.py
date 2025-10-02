@@ -1,3 +1,6 @@
+"""
+Модуль модели телефонного номера.
+"""
 from database.base_model import SQLAlchemyModel
 from sqlalchemy import Column, Integer, String, ForeignKey
 from database.models.organizations import OrganizationModel

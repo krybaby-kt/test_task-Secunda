@@ -1,3 +1,6 @@
+"""
+Модуль моделей для работы с базой данных.
+"""
 from database.models.buildings import BuildingModel
 from database.models.activities import ActivityModel
 from database.models.organizations import OrganizationModel
