@@ -163,13 +163,13 @@ async def get_organization_by_id(
 
 
 @router.get(
-    "/search-organizations-by-activity/{activity_name}",
+    "/search-organizations-by-activity/",
     description="Поиск организаций по деятельности",
     response_model=List[OrganizationInfo],
     response_model_exclude_none=True
 )
 async def search_organizations_by_activity(
-    activity_name: str = Path(..., description="Название деятельности")
+    activity_name: str = Query(..., description="Название деятельности")
 ):
     """
     Возвращает список организаций, связанных с указанной деятельностью и всеми её поддеятельностями.
@@ -185,13 +185,13 @@ async def search_organizations_by_activity(
 
 
 @router.get(
-    "/search-organizations-by-name/{organization_name}",
+    "/search-organizations-by-name/",
     description="Поиск организаций по названию",
     response_model=List[OrganizationInfo],
     response_model_exclude_none=True
 )
 async def search_organizations_by_name(
-    organization_name: str = Path(..., description="Название организации")
+    organization_name: str = Query(..., description="Название организации")
 ):
     """
     Возвращает список организаций, названия которых содержат указанную подстроку.
