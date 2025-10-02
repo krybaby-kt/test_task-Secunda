@@ -18,8 +18,7 @@ from database.repositories.activities import ActivityTool
 from web_api.schematics import OrganizationInfo
 
 
-# router = APIRouter(dependencies=[Depends(require_api_key)])
-router = APIRouter()
+router = APIRouter(dependencies=[Depends(require_api_key)])
 
 
 @router.get(
