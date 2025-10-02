@@ -3,7 +3,7 @@
 """
 from fastapi import FastAPI
 from starlette.middleware.cors import CORSMiddleware
-from web_api.endpoint import router
+from web_api.endpoints_v1 import router
 
 
 app = FastAPI(
@@ -22,4 +22,4 @@ app.add_middleware(
     allow_headers=["*"]
 )
 
-app.include_router(router, prefix="/api", tags=["test endpoints"])
+app.include_router(router, prefix="/api/v1", tags=["test endpoints v1"])
