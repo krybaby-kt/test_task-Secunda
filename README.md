@@ -163,22 +163,22 @@ pip install -r requirements.txt
 DATABASE_HOST=localhost
 DATABASE_PORT=5432
 DATABASE_USERNAME=postgres
-DATABASE_PASSWORD=your_password
-DATABASE_NAME=secunda_db
+DATABASE_PASSWORD=admin
+DATABASE_NAME=test_task_secunda
 
 # Backend
-BACKEND_HOST=0.0.0.0
-BACKEND_PORT=8000
+BACKEND_HOST=localhost
+BACKEND_PORT=3002
 
 # Security
-API_KEY=your_secret_api_key
+API_KEY=5GICkvou7Ko1IlcILiJ3a4zoBj3jxVVOHgGzt3tIteuSmu8PZIkwD4xXKaU2HSuEh4uKJfitlRUfxgi6hZeMtyD4GzG6Z9mJhftZcFZ6Q3gZDNP6kpqgUske8Cwhtm0c
 ```
 
 ### 4. Создание базы данных
 
 Создайте PostgreSQL базу данных:
 ```sql
-CREATE DATABASE secunda_db;
+CREATE DATABASE test_task_secunda;
 ```
 
 ### 5. Применение миграций
@@ -193,20 +193,20 @@ alembic upgrade head
 python main.py
 ```
 
-Приложение будет доступно по адресу: `http://localhost:8000`
+Приложение будет доступно по адресу: `http://localhost:3002`
 
 ## 📚 API Документация
 
 После запуска приложения документация доступна по адресам:
-- **Swagger UI**: http://localhost:8000/docs
-- **ReDoc**: http://localhost:8000/redoc
+- **Swagger UI**: http://localhost:3002/docs
+- **ReDoc**: http://localhost:3002/redoc
 
 ## 🔐 Аутентификация
 
 Все запросы к API требуют наличия заголовка `x-api-key`:
 
 ```bash
-curl -H "x-api-key: your_secret_api_key" http://localhost:8000/api/v1/...
+curl -H "x-api-key: 5GICkvou7Ko1IlcILiJ3a4zoBj3jxVVOHgGzt3tIteuSmu8PZIkwD4xXKaU2HSuEh4uKJfitlRUfxgi6hZeMtyD4GzG6Z9mJhftZcFZ6Q3gZDNP6kpqgUske8Cwhtm0c" http://localhost:3002/api/v1/...
 ```
 
 ## 📡 API Endpoints
@@ -217,8 +217,8 @@ GET /api/v1/get-all-organizations-by-building-id/{building_id}
 ```
 **Пример запроса:**
 ```bash
-curl -H "x-api-key: your_api_key" \
-  http://localhost:8000/api/v1/get-all-organizations-by-building-id/1
+curl -H "x-api-key: 5GICkvou7Ko1IlcILiJ3a4zoBj3jxVVOHgGzt3tIteuSmu8PZIkwD4xXKaU2HSuEh4uKJfitlRUfxgi6hZeMtyD4GzG6Z9mJhftZcFZ6Q3gZDNP6kpqgUske8Cwhtm0c" \
+  http://localhost:3002/api/v1/get-all-organizations-by-building-id/1
 ```
 
 ### 2. Получить организации по ID деятельности
@@ -237,8 +237,8 @@ GET /api/v1/get-all-organizations-by-radius/
 
 **Пример запроса:**
 ```bash
-curl -H "x-api-key: your_api_key" \
-  "http://localhost:8000/api/v1/get-all-organizations-by-radius/?latitude=55.7558&longitude=37.6173&radius_km=5"
+curl -H "x-api-key: 5GICkvou7Ko1IlcILiJ3a4zoBj3jxVVOHgGzt3tIteuSmu8PZIkwD4xXKaU2HSuEh4uKJfitlRUfxgi6hZeMtyD4GzG6Z9mJhftZcFZ6Q3gZDNP6kpqgUske8Cwhtm0c" \
+  "http://localhost:3002/api/v1/get-all-organizations-by-radius/?latitude=55.7558&longitude=37.6173&radius_km=5"
 ```
 
 ### 4. Поиск организаций в прямоугольной области
@@ -270,8 +270,8 @@ GET /api/v1/search-organizations-by-activity/
 
 **Пример запроса:**
 ```bash
-curl -H "x-api-key: your_api_key" \
-  "http://localhost:8000/api/v1/search-organizations-by-activity/?activity_name=Еда"
+curl -H "x-api-key: 5GICkvou7Ko1IlcILiJ3a4zoBj3jxVVOHgGzt3tIteuSmu8PZIkwD4xXKaU2HSuEh4uKJfitlRUfxgi6hZeMtyD4GzG6Z9mJhftZcFZ6Q3gZDNP6kpqgUske8Cwhtm0c" \
+  "http://localhost:3002/api/v1/search-organizations-by-activity/?activity_name=Еда"
 ```
 
 ### 7. Поиск организаций по названию
