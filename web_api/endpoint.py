@@ -11,6 +11,8 @@ from fastapi import Depends
 from typing import List
 from decimal import Decimal
 from utils.radius import haversine_distance
+from database.models.activities import ActivityModel
+from database.repositories.activities import ActivityTool
 
 
 # router = APIRouter(dependencies=[Depends(require_api_key)])
@@ -129,3 +131,18 @@ async def get_organization_by_id(
 ):
     organization: OrganizationModel = await OrganizationTool(organization_id).get()
     return JSONResponse(content=organization.name)
+
+
+@router.get(
+    "/search-organizations-by-activity/{activity_name}",
+    description="Search organizations by activity",
+    response_model=List[str],
+    response_model_exclude_none=True
+)
+async def search_organizations_by_activity(
+    activity_name: str = Path(..., description="Activity name")
+):
+    activities: list[ActivityModel] = await ActivityTool.get_all_with_sub_activities(activity_name)
+    organization_activities: list[OrganizationActivityModel] = await OrganizationActivityTool.get_all_with_filters(filters=[OrganizationActivityModel.activity_id.in_([activity.id for activity in activities])])
+    organizations: list[OrganizationModel] = await OrganizationTool.get_all_with_filters(filters=[OrganizationModel.id.in_([organization_activity.organization_id for organization_activity in organization_activities])])
+    return JSONResponse(content=[organization.name for organization in organizations])
