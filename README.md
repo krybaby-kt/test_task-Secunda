@@ -211,12 +211,39 @@ curl -H "x-api-key: 5GICkvou7Ko1IlcILiJ3a4zoBj3jxVVOHgGzt3tIteuSmu8PZIkwD4xXKaU2
 
 ## 📡 API Endpoints
 
+### Тестовые данные
+
+После применения миграций в базе будут следующие тестовые данные:
+
+**Здания:**
+- ID 1: г. Москва, ул. Тверская, д. 1
+- ID 2: г. Москва, ул. Арбат, д. 10  
+- ID 3: г. Санкт-Петербург, Невский пр., д. 28
+- ID 4: г. Новосибирск, ул. Ленина, д. 52
+
+**Организации:**
+- ID 1: ООО "Рога и Копыта" (здание 1)
+- ID 2: ООО "Мясокомбинат Московский" (здание 2)
+- ID 3: ООО "Молочный завод" (здание 3)
+- ID 5: ЗАО "АвтоТрейд" (здание 4)
+- ID 7: ООО "IT-Решения" (здание 6)
+
+**Деятельности:**
+- ID 1: Еда (уровень 1)
+- ID 4: Мясная продукция (уровень 2, родитель: Еда)
+- ID 5: Молочная продукция (уровень 2, родитель: Еда)
+- ID 2: Автомобили (уровень 1)
+- ID 8: Легковые (уровень 2, родитель: Автомобили)
+
+---
+
 ### 1. Получить организации по ID здания
 ```
 GET /api/v1/get-all-organizations-by-building-id/{building_id}
 ```
 **Пример запроса:**
 ```bash
+# Получить все организации в здании "г. Москва, ул. Тверская, д. 1" (ID 1)
 curl -H "x-api-key: 5GICkvou7Ko1IlcILiJ3a4zoBj3jxVVOHgGzt3tIteuSmu8PZIkwD4xXKaU2HSuEh4uKJfitlRUfxgi6hZeMtyD4GzG6Z9mJhftZcFZ6Q3gZDNP6kpqgUske8Cwhtm0c" \
   http://localhost:3002/api/v1/get-all-organizations-by-building-id/1
 ```
@@ -224,6 +251,12 @@ curl -H "x-api-key: 5GICkvou7Ko1IlcILiJ3a4zoBj3jxVVOHgGzt3tIteuSmu8PZIkwD4xXKaU2
 ### 2. Получить организации по ID деятельности
 ```
 GET /api/v1/get-all-organizations-by-activity-id/{activity_id}
+```
+**Пример запроса:**
+```bash
+# Получить все организации с деятельностью "Мясная продукция" (ID 4)
+curl -H "x-api-key: 5GICkvou7Ko1IlcILiJ3a4zoBj3jxVVOHgGzt3tIteuSmu8PZIkwD4xXKaU2HSuEh4uKJfitlRUfxgi6hZeMtyD4GzG6Z9mJhftZcFZ6Q3gZDNP6kpqgUske8Cwhtm0c" \
+  http://localhost:3002/api/v1/get-all-organizations-by-activity-id/4
 ```
 
 ### 3. Поиск организаций в радиусе
@@ -237,6 +270,7 @@ GET /api/v1/get-all-organizations-by-radius/
 
 **Пример запроса:**
 ```bash
+# Найти все организации в радиусе 5 км от центра Москвы (Красная площадь)
 curl -H "x-api-key: 5GICkvou7Ko1IlcILiJ3a4zoBj3jxVVOHgGzt3tIteuSmu8PZIkwD4xXKaU2HSuEh4uKJfitlRUfxgi6hZeMtyD4GzG6Z9mJhftZcFZ6Q3gZDNP6kpqgUske8Cwhtm0c" \
   "http://localhost:3002/api/v1/get-all-organizations-by-radius/?latitude=55.7558&longitude=37.6173&radius_km=5"
 ```
@@ -251,9 +285,22 @@ GET /api/v1/get-all-organizations-by-bounding-box/
 - `min_longitude` - минимальная долгота (запад)
 - `max_longitude` - максимальная долгота (восток)
 
+**Пример запроса:**
+```bash
+# Найти все организации в пределах центра Москвы (прямоугольная область)
+curl -H "x-api-key: 5GICkvou7Ko1IlcILiJ3a4zoBj3jxVVOHgGzt3tIteuSmu8PZIkwD4xXKaU2HSuEh4uKJfitlRUfxgi6hZeMtyD4GzG6Z9mJhftZcFZ6Q3gZDNP6kpqgUske8Cwhtm0c" \
+  "http://localhost:3002/api/v1/get-all-organizations-by-bounding-box/?min_latitude=55.74&max_latitude=55.77&min_longitude=37.59&max_longitude=37.63"
+```
+
 ### 5. Получить организацию по ID
 ```
 GET /api/v1/get-organization-by-id/{organization_id}
+```
+**Пример запроса:**
+```bash
+# Получить информацию об организации "ООО Рога и Копыта" (ID 1)
+curl -H "x-api-key: 5GICkvou7Ko1IlcILiJ3a4zoBj3jxVVOHgGzt3tIteuSmu8PZIkwD4xXKaU2HSuEh4uKJfitlRUfxgi6hZeMtyD4GzG6Z9mJhftZcFZ6Q3gZDNP6kpqgUske8Cwhtm0c" \
+  http://localhost:3002/api/v1/get-organization-by-id/1
 ```
 
 ### 6. Поиск организаций по деятельности (с вложенностью)
@@ -280,6 +327,13 @@ GET /api/v1/search-organizations-by-name/
 ```
 **Параметры:**
 - `organization_name` - название организации (поддерживает частичное совпадение)
+
+**Пример запроса:**
+```bash
+# Найти все организации, в названии которых есть слово "Авто"
+curl -H "x-api-key: 5GICkvou7Ko1IlcILiJ3a4zoBj3jxVVOHgGzt3tIteuSmu8PZIkwD4xXKaU2HSuEh4uKJfitlRUfxgi6hZeMtyD4GzG6Z9mJhftZcFZ6Q3gZDNP6kpqgUske8Cwhtm0c" \
+  "http://localhost:3002/api/v1/search-organizations-by-name/?organization_name=Авто"
+```
 
 ## 🗄 Работа с миграциями
 
