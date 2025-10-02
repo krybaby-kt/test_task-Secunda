@@ -59,6 +59,49 @@
 
 ## 📊 Структура базы данных
 
+### Диаграмма базы данных
+
+```mermaid
+erDiagram
+    BUILDINGS ||--o{ ORGANIZATIONS : "содержит"
+    ORGANIZATIONS ||--o{ PHONE_NUMBERS : "имеет"
+    ORGANIZATIONS ||--o{ ORGANIZATION_ACTIVITIES : "связана"
+    ACTIVITIES ||--o{ ORGANIZATION_ACTIVITIES : "связана"
+    ACTIVITIES ||--o{ ACTIVITIES : "parent_id"
+
+    BUILDINGS {
+        int id PK
+        string address UK
+        numeric latitude
+        numeric longitude
+    }
+
+    ORGANIZATIONS {
+        int id PK
+        string name UK
+        int building_id FK
+    }
+
+    ACTIVITIES {
+        int id PK
+        int parent_id FK
+        string name
+        int level
+    }
+
+    PHONE_NUMBERS {
+        int id PK
+        int organization_id FK
+        string phone_number
+    }
+
+    ORGANIZATION_ACTIVITIES {
+        int id PK
+        int organization_id FK
+        int activity_id FK
+    }
+```
+
 ### Модели:
 
 **Organizations** (Организации)
@@ -301,10 +344,10 @@ test_task-Secunda/
 ✅ Добавлена документация Swagger UI и ReDoc  
 ✅ Ограничение уровня вложенности деятельностей (3 уровня)  
 ✅ Аутентификация через статический API ключ  
+✅ Заполнение тестовыми данными (реализовано в файлах миграций)  
 
 ### Не реализовано из задания:
 ❌ Docker контейнер (требуется создать Dockerfile и docker-compose.yml)  
-❌ Автоматическое заполнение тестовыми данными  
 
 ### Возможные улучшения:
 - Добавить Docker контейнеризацию
