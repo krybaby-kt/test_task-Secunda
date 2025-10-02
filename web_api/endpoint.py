@@ -15,6 +15,7 @@ from typing import List
 from utils.radius import haversine_distance
 from database.models.activities import ActivityModel
 from database.repositories.activities import ActivityTool
+from web_api.schematics import OrganizationInfo
 
 
 # router = APIRouter(dependencies=[Depends(require_api_key)])
@@ -24,7 +25,7 @@ router = APIRouter()
 @router.get(
     "/get-all-organizations-by-building-id/{building_id}",
     description="Получить все организации по id здания",
-    response_model=List[str],
+    response_model=List[OrganizationInfo],
     response_model_exclude_none=True
 )
 async def get_all_organizations_by_building_id(
@@ -36,14 +37,16 @@ async def get_all_organizations_by_building_id(
     organizations: list[OrganizationModel] = await OrganizationTool.get_all_with_filters(filters=[OrganizationModel.building_id == building_id])
 
     return JSONResponse(
-        content=[organization.name for organization in organizations]
+        content=[
+            await OrganizationTool.get_organization_info(organization) for organization in organizations
+        ]
     )
 
 
 @router.get(
     "/get-all-organizations-by-activity-id/{activity_id}",
     description="Получить все организации по id деятельности",
-    response_model=List[str],
+    response_model=List[OrganizationInfo],
     response_model_exclude_none=True
 )
 async def get_all_organizations_by_activity_id(
@@ -54,13 +57,17 @@ async def get_all_organizations_by_activity_id(
     """
     organization_activities: list[OrganizationActivityModel] = await OrganizationActivityTool.get_all_with_filters(filters=[OrganizationActivityModel.activity_id == activity_id])
     organizations: list[OrganizationModel] = await OrganizationTool.get_all_with_filters(filters=[OrganizationModel.id.in_([organization_activity.organization_id for organization_activity in organization_activities])])
-    return JSONResponse(content=[organization.name for organization in organizations])
+    return JSONResponse(
+        content=[
+            await OrganizationTool.get_organization_info(organization) for organization in organizations
+        ]
+    )
 
 
 @router.get(
     "/get-all-organizations-by-radius/",
     description="Получить организации в радиусе от точки на карте",
-    response_model=List[str],
+    response_model=List[OrganizationInfo],
     response_model_exclude_none=True
 )
 async def get_all_organizations_by_radius(
@@ -89,13 +96,17 @@ async def get_all_organizations_by_radius(
         filters=[OrganizationModel.building_id.in_(buildings_in_radius)]
     )
     
-    return JSONResponse(content=[org.name for org in organizations])
+    return JSONResponse(
+        content=[
+            await OrganizationTool.get_organization_info(organization) for organization in organizations
+        ]
+    )
 
 
 @router.get(
     "/get-all-organizations-by-bounding-box/",
     description="Получить организации в прямоугольной области на карте",
-    response_model=List[str],
+    response_model=List[OrganizationInfo],
     response_model_exclude_none=True
 )
 async def get_all_organizations_by_bounding_box(
@@ -125,13 +136,17 @@ async def get_all_organizations_by_bounding_box(
         filters=[OrganizationModel.building_id.in_(building_ids)]
     )
     
-    return JSONResponse(content=[org.name for org in organizations])
+    return JSONResponse(
+        content=[
+            await OrganizationTool.get_organization_info(organization) for organization in organizations
+        ]
+    )
 
 
 @router.get(
     "/get-organization-by-id/{organization_id}",
     description="Получить организацию по её id",
-    response_model=str,
+    response_model=OrganizationInfo,
     response_model_exclude_none=True
 )
 async def get_organization_by_id(
@@ -143,13 +158,15 @@ async def get_organization_by_id(
     organization: OrganizationModel = await OrganizationTool(organization_id).get()
     if organization is None:
         return JSONResponse(content=[])
-    return JSONResponse(content=organization.name)
+    return JSONResponse(
+        content=await OrganizationTool.get_organization_info(organization)
+    )
 
 
 @router.get(
     "/search-organizations-by-activity/{activity_name}",
     description="Поиск организаций по деятельности",
-    response_model=List[str],
+    response_model=List[OrganizationInfo],
     response_model_exclude_none=True
 )
 async def search_organizations_by_activity(
@@ -161,13 +178,17 @@ async def search_organizations_by_activity(
     activities: list[ActivityModel] = await ActivityTool.get_all_with_sub_activities(activity_name)
     organization_activities: list[OrganizationActivityModel] = await OrganizationActivityTool.get_all_with_filters(filters=[OrganizationActivityModel.activity_id.in_([activity.id for activity in activities])])
     organizations: list[OrganizationModel] = await OrganizationTool.get_all_with_filters(filters=[OrganizationModel.id.in_([organization_activity.organization_id for organization_activity in organization_activities])])
-    return JSONResponse(content=[organization.name for organization in organizations])
+    return JSONResponse(
+        content=[
+            await OrganizationTool.get_organization_info(organization) for organization in organizations
+        ]
+    )
 
 
 @router.get(
     "/search-organizations-by-name/{organization_name}",
     description="Поиск организаций по названию",
-    response_model=List[str],
+    response_model=List[OrganizationInfo],
     response_model_exclude_none=True
 )
 async def search_organizations_by_name(
@@ -177,4 +198,8 @@ async def search_organizations_by_name(
     Возвращает список организаций, названия которых содержат указанную подстроку.
     """
     organizations: list[OrganizationModel] = await OrganizationTool.get_all_with_filters(filters=[OrganizationModel.name.ilike(f"%{organization_name}%")])
-    return JSONResponse(content=[organization.name for organization in organizations])
+    return JSONResponse(
+        content=[
+            await OrganizationTool.get_organization_info(organization) for organization in organizations
+        ]
+    )
