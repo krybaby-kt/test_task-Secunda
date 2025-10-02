@@ -146,3 +146,16 @@ async def search_organizations_by_activity(
     organization_activities: list[OrganizationActivityModel] = await OrganizationActivityTool.get_all_with_filters(filters=[OrganizationActivityModel.activity_id.in_([activity.id for activity in activities])])
     organizations: list[OrganizationModel] = await OrganizationTool.get_all_with_filters(filters=[OrganizationModel.id.in_([organization_activity.organization_id for organization_activity in organization_activities])])
     return JSONResponse(content=[organization.name for organization in organizations])
+
+
+@router.get(
+    "/search-organizations-by-name/{organization_name}",
+    description="Search organizations by name",
+    response_model=List[str],
+    response_model_exclude_none=True
+)
+async def search_organizations_by_name(
+    organization_name: str = Path(..., description="Organization name")
+):
+    organizations: list[OrganizationModel] = await OrganizationTool.get_all_with_filters(filters=[OrganizationModel.name.ilike(f"%{organization_name}%")])
+    return JSONResponse(content=[organization.name for organization in organizations])

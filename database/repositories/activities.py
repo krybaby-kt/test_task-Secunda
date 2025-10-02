@@ -12,16 +12,14 @@ class ActivityTool(AsyncBaseIdSQLAlchemyCRUD):
 
     @staticmethod
     async def get_all_with_sub_activities(activity_name: str) -> list[ActivityModel]:
-        result_activities: list[ActivityModel] = []
         activities: list[ActivityModel] = await ActivityTool.get_all_with_filters(filters=[ActivityModel.name == activity_name])
-        result_activities.extend(activities)
+        for sub_activities in await asyncio.gather(*[ActivityTool.get_all_sub_activities_by_id(activity.id) for activity in activities]):
+            activities.extend(sub_activities)
+        return activities
 
-        for activity in activities:
-            sub_activities: list[ActivityModel] = await ActivityTool.get_all_with_filters(filters=[ActivityModel.parent_id == activity.id])
-            result_activities.extend(sub_activities)
-
-            results = await asyncio.gather(*[ActivityTool.get_all_with_sub_activities(sub_activity.name) for sub_activity in sub_activities])
-            for result in results:
-                result_activities.extend(result)
-
-        return list(set(result_activities))
+    @staticmethod
+    async def get_all_sub_activities_by_id(activity_id: int) -> list[ActivityModel]:
+        sub_activities: list[ActivityModel] = await ActivityTool.get_all_with_filters(filters=[ActivityModel.parent_id == activity_id])
+        for sub_activities_ in await asyncio.gather(*[ActivityTool.get_all_sub_activities_by_id(sub_activity.id) for sub_activity in sub_activities]):
+            sub_activities.extend(sub_activities_)
+        return sub_activities
